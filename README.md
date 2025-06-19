@@ -16,7 +16,15 @@ In 2022, a ballot initiative to increase the tipped minimum wage recieved 73% of
 
 Since I82's implementation in May 2023, the tipped minimum wage in DC has been increased from $5.35 to $6.00, $6.00 to $8.00, and most recently $8.00 to $10.00 in July 2024. This presents a short timeframe from which to examine economic data and make conclusions about the impacts on wages and industry growth.  
 
-But why are different organizations drawing different conclusions from the same sources -- and what trends should we deem significant from less than two years of economic data?
+But why are different organizations drawing different conclusions from the same sources -- and what trends should we deem significant from less than two years of economic data? I created this project to take a closer look at some charts being shared and to attempt to dig into the insights they offer. 
 
-I decided to take a closer look at some charts being shared and dig into the insights they offer. 
+## Data Sources 
+
+Bureau of Labor Statistics’ Quarterly Census of Employment Wages (QCEW), https://www.bls.gov/cew/downloadable-data-files.htm 
+
+
+
+
+
+
 
