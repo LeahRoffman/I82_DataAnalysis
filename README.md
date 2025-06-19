@@ -1,4 +1,4 @@
-# I82_DataAnalysis
+# DC's Tipped Minimum Wage Policy - Exploring the Economic Debate
 
 I created this project to replicate and explore charts displaying data on DC's restaurant industry through the end of 2024. Economic trend data has been used by research institutes and advocacy groups to support arguments both for and against the continued implementation of DC's tipped minimum wage policy, referred to as Initiative 82 or I82.
 
