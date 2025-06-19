@@ -1,0 +1,77 @@
+---
+title: "RestaurantDataAnalysis"
+output: html_document
+date: "2025-06-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load libraries
+
+```{r}
+# Load required libraries
+
+library(utils)  # for download.file and unzip
+library(readr)  
+library(tidyverse)
+library(stringr)
+library(lubridate)
+```
+
+# Download data 
+
+```{r}
+# Create lists of csv files 
+csv_list_all <- list.files("./All_csvs")
+
+csv_list_fs <- csv_list_all[grepl("722511", csv_list_all)] # Full service restaurants
+csv_list_ls <- csv_list_all[grepl("722513", csv_list_all)] # Limited service restaurants
+csv_list_b <- csv_list_all[grepl("7224", csv_list_all)] # Drinking places 
+
+# Create empty data.frame
+
+cols <- names(read_csv(file = paste0("./All_csvs/", csv_list_all[1]))) # Get list of column names 
+df = data.frame(matrix(nrow = 0, ncol = length(cols))) # Initialize empty df
+colnames(df) = cols
+
+
+# Create vector of variables of interest
+
+vars_list <- c("area_fips", "area_title", "own_code", "industry_code", "agglvl_code", "year", "qtr", "qtrly_estabs_count", "month1_emplvl", "month2_emplvl", "month3_emplvl", "avg_wkly_wage")
+
+fips_list <- c("11001", "24000", "51000")
+
+```
+
+
+```{r}
+# Loop through csv lists to load all csvs by NAICS code
+      ## vars_list, fips_list defined above
+
+df_list_fs <- lapply(csv_list_fs, function(x) 
+  filter(select(read_csv(file = paste0("./All_csvs/", x)), vars_list), area_fips %in% fips_list))
+
+df_list_ls <- lapply(csv_list_ls, function(x) 
+  filter(select(read_csv(file = paste0("./All_csvs/", x)), vars_list), area_fips %in% fips_list))
+
+df_list_b <- lapply(csv_list_b, function(x) 
+  filter(select(read_csv(file = paste0("./All_csvs/", x)), vars_list), area_fips %in% fips_list))
+```
+
+
+```{r}
+# Rbind tables  
+
+df_fs <- do.call(rbind, df_list_fs)
+
+df_ls <- do.call(rbind, df_list_ls)
+
+df_b <- do.call(rbind, df_list_b)
+
+
+```
+
+# Clean data tables
+
