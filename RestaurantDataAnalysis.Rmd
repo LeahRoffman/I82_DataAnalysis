@@ -137,20 +137,19 @@ df_b_sums <- df_b %>% group_by(area_fips, area_title, industry_code, year, qtr, 
 
 ```
 
-
 # Introduction 
 
 I recently came across an argument on Twitter about trends in the DC restaurant industry:
 
-[Insert image]
+![Twitter exchange about industry trends]("./Images/TwitterScreenshot.png")
 
 As a District resident following the news around Initiative 82, I was interested to understand why their perspectives differed.
 
 Initiative 82 (I82) is a policy passed in 2022 that requires full-service restaurants and bars in DC to transition towards paying their servers and bartenders the DC minimum wage. The policy itself was preceded by a ballot initiative which received 73.9% of the popular vote in the District. The DC tipped minimum wage for service workers was only 5.35/hr at the time, well below the general minimum wage of 16.10/hr (now up to 17.50/hr).   Although service workers do make tips on top of their base wages, tips are dependent on customer spending levels and generosity, leading to cases of income instability.
 
-The debate around I82 has been heating up this year. Since implementation, the tipped minimum wage has been increased from 5.35 to 6.00, 6.00 to 8.00, and most recently 8.00 to 10.00 in July 2024.  In that time, some restaurant owners have experienced challenges adapting to the new costs. Given recent stressors on the local economy, their concerns have been amplified, and some high-profile restaurant closures have added to evidence of ongoing struggles.  
+The debate around I82 has been heating up this year. Since implementation, the tipped minimum wage has been increased from 5.35 to 6.00, 6.00 to 8.00, and most recently 8.00 to 10.00 in July 2024.^[https://www.documentcloud.org/documents/25958428-2025-05-20-restaurant-industry-memo-final/, pg 1]  In that time, some restaurant owners have experienced challenges adapting to the new costs. Given recent stressors on the local economy, their concerns have been amplified, and some high-profile restaurant closures have added to evidence of ongoing struggles.^[https://www.washingtonian.com/2025/04/03/how-much-trouble-are-dc-restaurants-really-in/]
 
-All this has led DC Mayor Bowser to propose repealing I82 completely – and this month, the DC Council voted to put a pause on implementation, halting the next planned increase from 10 to 12 and bringing the future of the policy into question.    
+All this has led DC Mayor Bowser to propose repealing I82 completely – and this month, the DC Council voted to put a pause on implementation, halting the next planned increase from 10 to 12 and bringing the future of the policy into question.^[https://www.nbcwashington.com/news/local/dc-council-votes-to-pause-tipped-wage-increase/3927718/]    
 
 It makes sense why restaurant owners and service workers may have contradictory views on how the policy has played out. But why does their data differ – and what evidence should drive the DC Council’s decision on whether or not to keep the policy? 
 
@@ -161,23 +160,23 @@ Without getting into all of the complex factors affecting our economy right now,
 Prior to looking at the data, it’s helpful to clarify the economic questions relevant to this policy debate. Raising the tipped minimum wage for service workers affects three main groups – restaurant owners, service workers, and consumers. A wholistic analysis of I82’s economic impact should assess trends among all three groups.  
 
 With respect to restaurant and bar owners, analysts might ask:
-•	Has growth in the full-service restaurant industry changed since I82 implementation? 
-•	Has growth in the full-service restaurant industry in DC changed at comparable rates with regional and national trends since I82 implementation?
-•	Has I82 implementation increased DC restaurant closures, or is it likely to contribute to closures in the future?
+- Has growth in the full-service restaurant industry changed since I82 implementation? 
+-	Has growth in the full-service restaurant industry in DC changed at comparable rates with regional and national trends since I82 implementation?
+-	Has I82 implementation increased DC restaurant closures, or is it likely to contribute to closures in the future?
 
 With respect to service workers, analysts might ask: 
-•	Has the weekly and monthly income for DC service workers changed since I82 implementation? 
-•	Have employment levels for service workers changed since I82 implementation?
-•	Have employment levels for service workers in DC changed at comparable rates with regional and national trends since I82 implementation?
+-	Has the weekly and monthly income for DC service workers changed since I82 implementation? 
+-	Have employment levels for service workers changed since I82 implementation?
+-	Have employment levels for service workers in DC changed at comparable rates with regional and national trends since I82 implementation?
 
 Which respect to consumers, analysts might ask:  
-•	Has consumer spending and tipping at full-service restaurants in DC changed since I82 implementation? 
-•	How does consumer spending and tipping at full-service restaurants in DC compare to national trends in consumer spending since I82 implementation?
-•	How elastic is consumer spending and tipping relative to price increases at full-service restaurants and bars in DC? 
+-	Has consumer spending and tipping at full-service restaurants in DC changed since I82 implementation? 
+-	How does consumer spending and tipping at full-service restaurants in DC compare to national trends in consumer spending since I82 implementation?
+-	How elastic is consumer spending and tipping relative to price increases at full-service restaurants and bars in DC? 
 
-Thus far, groups such as the Restaurant Association of Metropolitan Washington (RAMW) and the Employment Policies Institute (EPI) have argued that both the restaurant industry and service workers are hurting due to I82.
+Thus far, groups such as the [Restaurant Association of Metropolitan Washington (RAMW)](https://www.ramw.org/) and the [Employment Policies Institute (EPI)](https://epionline.org/) have argued that both the restaurant industry and service workers are hurting due to I82.
 
-In contrast, the service workers’ union Unite Local 25 and the advocacy group One Fair Wage have argued that there is a lack of economic evidence showing that the industry is suffering. 
+In contrast, the service workers’ union [Unite Local 25](https://x.com/UHLocal25/status/1929508002828042472) and the advocacy group [One Fair Wage](https://static1.squarespace.com/static/6374f6bf33b7675afa750d48/t/65551d0897043249c7c1293b/1700076810648/OFW_OneYearAfter_DC82+%281%29.pdf) have argued that there is a lack of economic evidence showing that the industry is suffering. 
 
 The DC Budget Council, a research body for DC’s councilmembers, produced a report showing that there have been steady trends in the restaurant industry in the wake of I82’s passage. However, many of their charts were directly critiqued by EPI in the tweet exchanged cited above.
 
@@ -371,7 +370,7 @@ p3 +
 
 It appears that indexing to a more recent time frame does challenge the statement that growth in DC “far outpaces surrounding jurisdictions”. These charts also show declining growth rates across all three regions, which could mean that growth in the industry is flatlining. However, they still show DC’s restaurant industry changing at a comparable rate to MD and VA, which would make it difficult to argue that I82 has had a negative impact on growth. 
 
-The most recent data in these charts is from Q3 2024. To be sure, this is not recent enough to cover the latest trends, such as those taking place in early 2025. There has been an outpouring of anecdotal evidence from restaurant owners indicating that 2025 closures may be imminent, and one survey cited in a blog post from RAMW has 44% of DC restaurants at risk of closure in the coming year. 
+The most recent data in these charts is from Q3 2024. To be sure, this is not recent enough to cover the latest trends, such as those taking place in early 2025. There has been an outpouring of anecdotal evidence from restaurant owners indicating that 2025 closures may be imminent, and one survey cited in a blog post from RAMW has 44% of DC restaurants at risk of closure in the coming year.^[https://www.ramw.org/articles/blog/viewpoint-why-dc-must-repeal-initiative-82] 
 
 However, even if closures do come to pass, it will be difficult to prove that they result directly from I82. DC restaurants are facing a number of stressors – tariffs, inflation, the end of pandemic income supports, and rent increases, to name a few.  All of these factors are at play in the economic landscape, and it will be challenging to draw causal conclusions from these snapshots of data alone.
 
