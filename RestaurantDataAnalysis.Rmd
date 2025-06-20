@@ -1,5 +1,5 @@
 ---
-title: "RestaurantDataAnalysis"
+title: "DC’s tipped minimum wage: Exploring the economic debate"
 output:
   html_document: default
   pdf_document: default
@@ -7,12 +7,12 @@ date: "2025-06-19"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-# Load libraries
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
+
 # Load required libraries
 
 library(utils)  # for download.file and unzip
@@ -20,11 +20,14 @@ library(readr)
 library(tidyverse)
 library(stringr)
 library(lubridate)
+
 ```
 
-# Download data 
+```{r, message=FALSE, warning=FALSE}
 
-```{r}
+# Download data
+
+
 # Create lists of csv files 
 csv_list_all <- list.files("./All_csvs")
 
@@ -48,7 +51,7 @@ fips_list <- c("11001", "24000", "51000")
 ```
 
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 # Loop through csv lists to load all csvs by NAICS code
       ## vars_list, fips_list defined above
 
@@ -63,7 +66,7 @@ df_list_b <- lapply(csv_list_b, function(x)
 ```
 
 
-```{r}
+```{r, message=FALSE}
 # Rbind tables  
 
 df_fs <- do.call(rbind, df_list_fs)
@@ -77,7 +80,7 @@ df_b <- do.call(rbind, df_list_b)
 
 ## Clean data tables
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 
 # Convert quarter & year variables to dates 
 ## Creating "date" with the structure "%Y-%m-%d" for the start of each qtr
@@ -135,14 +138,64 @@ df_b_sums <- df_b %>% group_by(area_fips, area_title, industry_code, year, qtr, 
 ```
 
 
-```{r}
-df_b_sums %>% select(year) %>% unique()
-```
+# Introduction 
+
+I recently came across an argument on Twitter about trends in the DC restaurant industry:
+
+[Insert image]
+
+As a District resident following the news around Initiative 82, I was interested to understand why their perspectives differed.
+
+Initiative 82 (I82) is a policy passed in 2022 that requires full-service restaurants and bars in DC to transition towards paying their servers and bartenders the DC minimum wage. The policy itself was preceded by a ballot initiative which received 73.9% of the popular vote in the District. The DC tipped minimum wage for service workers was only 5.35/hr at the time, well below the general minimum wage of 16.10/hr (now up to 17.50/hr).   Although service workers do make tips on top of their base wages, tips are dependent on customer spending levels and generosity, leading to cases of income instability.
+
+The debate around I82 has been heating up this year. Since implementation, the tipped minimum wage has been increased from 5.35 to 6.00, 6.00 to 8.00, and most recently 8.00 to 10.00 in July 2024.  In that time, some restaurant owners have experienced challenges adapting to the new costs. Given recent stressors on the local economy, their concerns have been amplified, and some high-profile restaurant closures have added to evidence of ongoing struggles.  
+
+All this has led DC Mayor Bowser to propose repealing I82 completely – and this month, the DC Council voted to put a pause on implementation, halting the next planned increase from 10 to 12 and bringing the future of the policy into question.    
+
+It makes sense why restaurant owners and service workers may have contradictory views on how the policy has played out. But why does their data differ – and what evidence should drive the DC Council’s decision on whether or not to keep the policy? 
+
+Without getting into all of the complex factors affecting our economy right now, I thought it might help to at least take a closer look at some of the charts I saw on Twitter.   
+
+## What are the questions up for debate?
+
+Prior to looking at the data, it’s helpful to clarify the economic questions relevant to this policy debate. Raising the tipped minimum wage for service workers affects three main groups – restaurant owners, service workers, and consumers. A wholistic analysis of I82’s economic impact should assess trends among all three groups.  
+
+With respect to restaurant and bar owners, analysts might ask:
+•	Has growth in the full-service restaurant industry changed since I82 implementation? 
+•	Has growth in the full-service restaurant industry in DC changed at comparable rates with regional and national trends since I82 implementation?
+•	Has I82 implementation increased DC restaurant closures, or is it likely to contribute to closures in the future?
+
+With respect to service workers, analysts might ask: 
+•	Has the weekly and monthly income for DC service workers changed since I82 implementation? 
+•	Have employment levels for service workers changed since I82 implementation?
+•	Have employment levels for service workers in DC changed at comparable rates with regional and national trends since I82 implementation?
+
+Which respect to consumers, analysts might ask:  
+•	Has consumer spending and tipping at full-service restaurants in DC changed since I82 implementation? 
+•	How does consumer spending and tipping at full-service restaurants in DC compare to national trends in consumer spending since I82 implementation?
+•	How elastic is consumer spending and tipping relative to price increases at full-service restaurants and bars in DC? 
+
+Thus far, groups such as the Restaurant Association of Metropolitan Washington (RAMW) and the Employment Policies Institute (EPI) have argued that both the restaurant industry and service workers are hurting due to I82.
+
+In contrast, the service workers’ union Unite Local 25 and the advocacy group One Fair Wage have argued that there is a lack of economic evidence showing that the industry is suffering. 
+
+The DC Budget Council, a research body for DC’s councilmembers, produced a report showing that there have been steady trends in the restaurant industry in the wake of I82’s passage. However, many of their charts were directly critiqued by EPI in the tweet exchanged cited above.
 
 
-# Exploring the data 
+## Impacts on Restaurants and Business Owners
 
-## Plot 1: Growth of full-service establishments in DC (Index==2018)
+Has paying service workers a higher minimum wage impacted restaurant viability in DC? 
+
+Many argue that raising the tipped minimum wage will increase income for workers at a critical expense to business owners. Critics warn that if restaurant owners spend more money on labor, they will have to raise prices, use fewer workers, or lose some of their own income, leading to potential closures. However, the real burden on business owners can be complicated due to varying sizes, business models, and practices among restaurants. 
+
+As mentioned, since May 2023, the tipped minimum wage has increased in steps from $5.35 to $10. This presents a small timeframe of data from which to make initial observations about the policy’s impact on businesses. 
+
+According to the DC Budget Council, the DC restaurant industry has continued on healthy trends of growth in that time.  The number of full-service establishments has continued to grow in line with both national and regional trends. 
+
+I replicated their chart below: 
+
+
+### Plot 1: Growth of full-service establishments in DC (Index==2018)
 
 ```{r}
 ## Subset for plot
@@ -193,10 +246,16 @@ p1 +
        subtitle = paste0("Index: ",index_year,"Q1=100"),
        x = "",
        y = "",
-       caption = paste0("An increase of 1 represents a 1% increase above the ",index_year," restaurant count for that state")) 
+       caption = paste0("An increase of 1 represents a 1% increase above the ",index_year," restaurant count for that state", "\n", "Data Source:")) 
 
 
 ```
+
+However, in the Tweet exchange cited above, the Employment Policies Institute critiqued the DBC approach of indexing to 2014 when assessing relative growth. 
+
+Indexing is a method that calculates percent change in a variable relative to a specific year. It is likely used in this analysis to compare growth rates across regions with differently sized populations. Choosing 2014 as the index year for the graph could obscure more recent changes in the industry’s growth rate by referencing an outdated time period as the benchmark. 
+
+I created some replicas of the DBC chart above that are indexed to 2021 Q1 (the approximate start of pandemic recovery) and 2023 Q1 (the quarter prior to I82 implementation):
 
 ## Plot 2: Growth of full-service establishments in DC (Index==2021)
 
@@ -310,9 +369,17 @@ p3 +
 
 ```
 
-## Plot 4: Full and Limited service employment levels in DC since Covid 
+It appears that indexing to a more recent time frame does challenge the statement that growth in DC “far outpaces surrounding jurisdictions”. These charts also show declining growth rates across all three regions, which could mean that growth in the industry is flatlining. However, they still show DC’s restaurant industry changing at a comparable rate to MD and VA, which would make it difficult to argue that I82 has had a negative impact on growth. 
 
-```{r}
+The most recent data in these charts is from Q3 2024. To be sure, this is not recent enough to cover the latest trends, such as those taking place in early 2025. There has been an outpouring of anecdotal evidence from restaurant owners indicating that 2025 closures may be imminent, and one survey cited in a blog post from RAMW has 44% of DC restaurants at risk of closure in the coming year. 
+
+However, even if closures do come to pass, it will be difficult to prove that they result directly from I82. DC restaurants are facing a number of stressors – tariffs, inflation, the end of pandemic income supports, and rent increases, to name a few.  All of these factors are at play in the economic landscape, and it will be challenging to draw causal conclusions from these snapshots of data alone.
+
+
+
+```{r, include=FALSE}
+
+### Plot 4: Full and Limited service employment levels in DC since Covid 
 
 # Subset and restructure data 
 ## Employment level data is available by month 
@@ -385,7 +452,7 @@ p4_subset_dc <- p4_subset %>% filter(area_fips=="11001")
 ```
 
 
-```{r}
+```{r, include=FALSE}
 # Plot 
 
 ## Data is p4_subset or p4_subset_dc created above
@@ -413,7 +480,7 @@ p4 +
 
 ## Plot 5: Full and Limited service restaurant employment levels in DC since I82 implementation 
 
-```{r}
+```{r, include=FALSE}
 p5_subset <- p4_subset_dc %>% filter(year >= 2022)
 
 p5_subset_labels <- p5_subset
@@ -427,7 +494,7 @@ p5_subset_labels$labels[which(p5_subset_labels$date == as.Date("2023-05-01"))] <
 
 ```
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, include=FALSE}
 # Plot 5
 
 ## Resource: https://r-graph-gallery.com/275-add-text-labels-with-ggplot2.html 
@@ -458,7 +525,7 @@ p5 +
 
 ## Table 1: Change in employment levels in DC, MD, VA -- Full service 
 
-```{r}
+```{r, include=FALSE}
 # Create dataset that combines restaurant and bar employment levels 
 
 t1_subset <- p4_subset %>% group_by(area_fips, area_title, year, date) %>% 
@@ -474,7 +541,7 @@ t1_subset <- t1_subset %>% mutate(FS_and_B = FS + B)
 ```
 
 
-```{r}
+```{r, include=FALSE}
 # Format and display table 1 -- Sept 23 - May 24
 
 t1 <- t1_subset %>% filter(date == "2023-09-01" | date == "2024-05-01")
