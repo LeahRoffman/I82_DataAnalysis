@@ -1,6 +1,8 @@
 ---
 title: "RestaurantDataAnalysis"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 date: "2025-06-19"
 ---
 
@@ -78,7 +80,7 @@ df_b <- do.call(rbind, df_list_b)
 ```{r}
 
 # Convert quarter & year variables to dates 
-## Creating new variable "date" with the structure "%Y-%m"
+## Creating "date" with the structure "%Y-%m-%d" for the start of each qtr
 
 df_fs <- df_fs %>% mutate(month = case_when(qtr==1 ~ "01",
                                    qtr==2 ~ "04",
@@ -134,7 +136,119 @@ df_b_sums <- df_b %>% group_by(area_fips, area_title, industry_code, year, qtr, 
 
 # Exploring the data 
 
-## Plot 1.1: Growth of full-service establishments in DC 
+## Plot 1: Growth of full-service establishments in DC (Index==2018)
+
+```{r}
+## Subset for plot
+
+index_year <- 2018
+
+
+p1_subset <- df_fs_sums %>% mutate(type = "Full-Service") 
+  ##%>% filter(year >= index_year)
+
+# Indexes for [Year]
+dc_index <- p1_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==11001) %>% select(all_qtrly_estabs_count) %>% pull()
+md_index <- p1_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==24000) %>% select(all_qtrly_estabs_count) %>% pull()
+va_index <- p1_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==51000) %>% select(all_qtrly_estabs_count) %>% pull()
+
+p1_subset <- p1_subset %>% mutate(indexed_qtrly_estabs_count = round(case_when(area_fips==11001 ~ 100*(all_qtrly_estabs_count/dc_index),
+                                                       area_fips==24000 ~ 100*(all_qtrly_estabs_count/md_index),
+                                                       area_fips==51000 ~ 100*(all_qtrly_estabs_count/va_index)),2))
+
+p1_subset$labels <- NA
+p1_subset$labels[which(p1_subset$date == max(p1_subset$date))] <- p1_subset$indexed_qtrly_estabs_count[which(p1_subset$date == max(p1_subset$date))]
+
+```
+
+```{r warning=F}
+## Plot
+
+  # Range from 80-160 
+  # Colors -- DC = blue, VA = green, MD = orange
+
+p5 <- ggplot(p1_subset, aes(x = date, y = indexed_qtrly_estabs_count, color = as.factor(area_fips))) +
+  geom_line(linewidth = 1) +
+  theme_classic() +
+  geom_text(aes(label=p1_subset$labels, color = as.factor(area_fips)), show.legend=FALSE, hjust = 0) +
+  #geom_label(label = p1_subset$labels, nudge_x = 1, warning=F, show.legend = FALSE) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%Y/%m", expand=c(0,0), limits = as.Date(c(paste0("2018", "-01-01"), "2025-01-01")))
+
+
+p5 + 
+  theme(legend.position = c(0.2,0.8),
+        axis.text.x = element_text(angle = 45, vjust=0.5),
+        plot.title = element_text(margin=margin(0,0,15,0)),
+        plot.subtitle = element_text(size=9)) +
+  scale_y_continuous(limits = c(80,140)) +
+  scale_color_manual(labels = c("District of Columbia", "Maryland", "Virginia"), name = "State", 
+                     values=c("darkblue", "darkorange", "darkgreen")) +
+  labs(title = paste0("Growth in number of full-service establishments in DC, MD, and VA since ", index_year),
+       subtitle = paste0("Index: ",index_year,"Q1=100"),
+       x = "",
+       y = "",
+       caption = paste0("An increase of 1 represents a 1% increase above the ",index_year," restaurant count for that state")) 
+
+
+```
+
+## Plot 2: Growth of full-service establishments in DC (Index==2021)
+
+```{r}
+## Subset for plot
+
+index_year <- 2021
+
+
+p2_subset <- df_fs_sums %>% mutate(type = "Full-Service") 
+  ##%>% filter(year >= index_year)
+
+# Indexes for [Year]
+dc_index <- p2_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==11001) %>% select(all_qtrly_estabs_count) %>% pull()
+md_index <- p2_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==24000) %>% select(all_qtrly_estabs_count) %>% pull()
+va_index <- p2_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==51000) %>% select(all_qtrly_estabs_count) %>% pull()
+
+p2_subset <- p2_subset %>% mutate(indexed_qtrly_estabs_count = round(case_when(area_fips==11001 ~ 100*(all_qtrly_estabs_count/dc_index),
+                                                       area_fips==24000 ~ 100*(all_qtrly_estabs_count/md_index),
+                                                       area_fips==51000 ~ 100*(all_qtrly_estabs_count/va_index)),2))
+
+p2_subset$labels <- NA
+p2_subset$labels[which(p2_subset$date == max(p2_subset$date))] <- p2_subset$indexed_qtrly_estabs_count[which(p2_subset$date == max(p2_subset$date))]
+
+```
+
+```{r warning=F}
+## Plot
+
+  # Range from 80-160 
+  # Colors -- DC = blue, VA = green, MD = orange
+
+p5 <- ggplot(p2_subset, aes(x = date, y = indexed_qtrly_estabs_count, color = as.factor(area_fips))) +
+  geom_line(linewidth = 1) +
+  theme_classic() +
+  geom_text(aes(label=p2_subset$labels, color = as.factor(area_fips)), show.legend=FALSE, hjust = 0) +
+  #geom_label(label = p2_subset$labels, nudge_x = 1, warning=F, show.legend = FALSE) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%Y/%m", expand=c(0,0), limits = as.Date(c(paste0("2018", "-01-01"), "2025-01-01")))
+
+
+p5 + 
+  theme(legend.position = c(0.2,0.8),
+        axis.text.x = element_text(angle = 45, vjust=0.5),
+        plot.title = element_text(margin=margin(0,0,15,0)),
+        plot.subtitle = element_text(size=9)) +
+  scale_y_continuous(limits = c(80,140)) +
+  scale_color_manual(labels = c("District of Columbia", "Maryland", "Virginia"), name = "State", 
+                     values=c("darkblue", "darkorange", "darkgreen")) +
+  labs(title = paste0("Growth in number of full-service establishments in DC, MD, and VA since ", index_year),
+         subtitle = paste0("Index: ",index_year,"Q1=100"),
+       x = "",
+       y = "",
+       caption = paste0("An increase of 1 represents a 1% increase above the ",index_year," restaurant count for that state")) 
+
+```
+
+
+## Plot 3: Growth of full-service establishments in DC (Index==2023)
 
 ```{r}
 ## Subset for plot
@@ -142,20 +256,50 @@ df_b_sums <- df_b %>% group_by(area_fips, area_title, industry_code, year, qtr, 
 index_year <- 2023
 
 
-p5_subset <- df_fs %>% mutate(type = "Full-Service") %>% filter(own_code==5, year >= index_year)
+p3_subset <- df_fs_sums %>% mutate(type = "Full-Service") 
+  ##%>% filter(year >= index_year)
 
 # Indexes for [Year]
-dc_index <- p5_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==11001) %>% select(qtrly_estabs_count) %>% pull()
-md_index <- p5_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==24000) %>% select(qtrly_estabs_count) %>% pull()
-va_index <- p5_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==51000) %>% select(qtrly_estabs_count) %>% pull()
+dc_index <- p3_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==11001) %>% select(all_qtrly_estabs_count) %>% pull()
+md_index <- p3_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==24000) %>% select(all_qtrly_estabs_count) %>% pull()
+va_index <- p3_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==51000) %>% select(all_qtrly_estabs_count) %>% pull()
 
-p5_subset <- p5_subset %>% mutate(indexed_qtrly_estabs_count = round(case_when(area_fips==11001 ~ 100*(qtrly_estabs_count/dc_index),
-                                                       area_fips==24000 ~ 100*(qtrly_estabs_count/md_index),
-                                                       area_fips==51000 ~ 100*(qtrly_estabs_count/va_index)),2))
+p3_subset <- p3_subset %>% mutate(indexed_qtrly_estabs_count = round(case_when(area_fips==11001 ~ 100*(all_qtrly_estabs_count/dc_index),
+                                                       area_fips==24000 ~ 100*(all_qtrly_estabs_count/md_index),
+                                                       area_fips==51000 ~ 100*(all_qtrly_estabs_count/va_index)),2))
 
-p5_subset$labels <- NA
-p5_subset$labels[which(p5_subset$date == max(p5_subset$date))] <- p5_subset$indexed_qtrly_estabs_count[which(p5_subset$date == max(p5_subset$date))]
+p3_subset$labels <- NA
+p3_subset$labels[which(p3_subset$date == max(p3_subset$date))] <- p3_subset$indexed_qtrly_estabs_count[which(p3_subset$date == max(p3_subset$date))]
 
 ```
 
+```{r warning=F}
+## Plot
 
+  # Range from 80-160 
+  # Colors -- DC = blue, VA = green, MD = orange
+
+p5 <- ggplot(p3_subset, aes(x = date, y = indexed_qtrly_estabs_count, color = as.factor(area_fips))) +
+  geom_line(linewidth = 1) +
+  theme_classic() +
+  geom_text(aes(label=p3_subset$labels, color = as.factor(area_fips)), show.legend=FALSE, hjust = 0) +
+  #geom_label(label = p3_subset$labels, nudge_x = 1, warning=F, show.legend = FALSE) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%Y/%m", expand=c(0,0), limits = as.Date(c(paste0("2018", "-01-01"), "2025-01-01")))
+
+
+p5 + 
+  theme(legend.position = c(0.2,0.8),
+        axis.text.x = element_text(angle = 45, vjust=0.5),
+        plot.title = element_text(margin=margin(0,0,15,0)),
+        plot.subtitle = element_text(size=9)) +
+  scale_y_continuous(limits = c(80,140)) +
+  scale_color_manual(labels = c("District of Columbia", "Maryland", "Virginia"), name = "State", 
+                     values=c("darkblue", "darkorange", "darkgreen")) +
+  labs(title = paste0("Growth in number of full-service establishments in DC, MD, and VA since ", index_year),
+         subtitle = paste0("Index: ",index_year,"Q1=100"),
+       x = "",
+       y = "",
+       caption = paste0("An increase of 1 represents a 1% increase above the ",index_year," restaurant count for that state")) 
+
+
+```
