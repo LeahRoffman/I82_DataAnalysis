@@ -456,7 +456,47 @@ p5 +
 
 ```
 
-## Table 1: 
+## Table 1: Change in employment levels in DC, MD, VA -- Full service 
+
+```{r}
+# Create dataset that combines restaurant and bar employment levels 
+
+t1_subset <- p4_subset %>% group_by(area_fips, area_title, year, date) %>% 
+  select(area_fips, area_title, year, date, industry_code, employment_lvl) %>% 
+  pivot_wider(names_from = industry_code, values_from = employment_lvl) 
+
+names(t1_subset)[names(t1_subset) == '722511'] <- "FS"
+names(t1_subset)[names(t1_subset) == '722513'] <- "LS"
+names(t1_subset)[names(t1_subset) == '7224'] <- "B"
+
+t1_subset <- t1_subset %>% mutate(FS_and_B = FS + B)
+
+```
+
+
+```{r}
+# Format and display table 1 -- Sept 23 - May 24
+
+t1 <- t1_subset %>% filter(date == "2023-09-01" | date == "2024-05-01")
+
+t1 <- t1 %>% ungroup() %>% select(area_title, date, FS_and_B) %>% 
+  mutate(date = ifelse(date == "2023-09-01", "Sept2023", "May2024"),
+         area_title = case_when(area_title=="District of Columbia, not unknown" ~ "District of Columbia",
+                                area_title=="Maryland -- Statewide" ~ "Maryland",
+                                area_title=="Virginia -- Statewide" ~ "Virginia"))
+
+t1 <- t1 %>% pivot_wider(names_from = date, values_from = FS_and_B) 
+
+
+knitr::kable(t1)
+
+```
+
+
+
+
+
+
 
 
 
