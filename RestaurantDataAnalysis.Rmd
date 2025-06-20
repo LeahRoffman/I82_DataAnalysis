@@ -1,8 +1,8 @@
 ---
 title: "RestaurantDataAnalysis"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 date: "2025-06-19"
 ---
 
@@ -117,22 +117,28 @@ df_fs_sums <- df_fs %>% group_by(area_fips, area_title, industry_code, year, qtr
   summarise(all_qtrly_estabs_count = sum(qtrly_estabs_count),
             all_month1_emplvl = sum(month1_emplvl),
             all_month2_emplvl = sum(month2_emplvl),
-            all_month3_emplvl = sum(month3_emplvl))
+            all_month3_emplvl = sum(month3_emplvl)) %>% ungroup()
 
 df_ls_sums <- df_ls %>% group_by(area_fips, area_title, industry_code, year, qtr, date) %>% 
   summarise(all_qtrly_estabs_count = sum(qtrly_estabs_count),
             all_month1_emplvl = sum(month1_emplvl),
             all_month2_emplvl = sum(month2_emplvl),
-            all_month3_emplvl = sum(month3_emplvl))
+            all_month3_emplvl = sum(month3_emplvl)) %>% ungroup()
 
 
 df_b_sums <- df_b %>% group_by(area_fips, area_title, industry_code, year, qtr, date) %>% 
   summarise(all_qtrly_estabs_count = sum(qtrly_estabs_count),
             all_month1_emplvl = sum(month1_emplvl),
             all_month2_emplvl = sum(month2_emplvl),
-            all_month3_emplvl = sum(month3_emplvl))
+            all_month3_emplvl = sum(month3_emplvl)) %>% ungroup()
 
 ```
+
+
+```{r}
+df_b_sums %>% select(year) %>% unique()
+```
+
 
 # Exploring the data 
 
@@ -167,7 +173,7 @@ p1_subset$labels[which(p1_subset$date == max(p1_subset$date))] <- p1_subset$inde
   # Range from 80-160 
   # Colors -- DC = blue, VA = green, MD = orange
 
-p5 <- ggplot(p1_subset, aes(x = date, y = indexed_qtrly_estabs_count, color = as.factor(area_fips))) +
+p1 <- ggplot(p1_subset, aes(x = date, y = indexed_qtrly_estabs_count, color = as.factor(area_fips))) +
   geom_line(linewidth = 1) +
   theme_classic() +
   geom_text(aes(label=p1_subset$labels, color = as.factor(area_fips)), show.legend=FALSE, hjust = 0) +
@@ -175,7 +181,7 @@ p5 <- ggplot(p1_subset, aes(x = date, y = indexed_qtrly_estabs_count, color = as
   scale_x_date(date_breaks = "3 months", date_labels = "%Y/%m", expand=c(0,0), limits = as.Date(c(paste0("2018", "-01-01"), "2025-01-01")))
 
 
-p5 + 
+p1 + 
   theme(legend.position = c(0.2,0.8),
         axis.text.x = element_text(angle = 45, vjust=0.5),
         plot.title = element_text(margin=margin(0,0,15,0)),
@@ -223,7 +229,7 @@ p2_subset$labels[which(p2_subset$date == max(p2_subset$date))] <- p2_subset$inde
   # Range from 80-160 
   # Colors -- DC = blue, VA = green, MD = orange
 
-p5 <- ggplot(p2_subset, aes(x = date, y = indexed_qtrly_estabs_count, color = as.factor(area_fips))) +
+p2 <- ggplot(p2_subset, aes(x = date, y = indexed_qtrly_estabs_count, color = as.factor(area_fips))) +
   geom_line(linewidth = 1) +
   theme_classic() +
   geom_text(aes(label=p2_subset$labels, color = as.factor(area_fips)), show.legend=FALSE, hjust = 0) +
@@ -231,7 +237,7 @@ p5 <- ggplot(p2_subset, aes(x = date, y = indexed_qtrly_estabs_count, color = as
   scale_x_date(date_breaks = "3 months", date_labels = "%Y/%m", expand=c(0,0), limits = as.Date(c(paste0("2018", "-01-01"), "2025-01-01")))
 
 
-p5 + 
+p2 + 
   theme(legend.position = c(0.2,0.8),
         axis.text.x = element_text(angle = 45, vjust=0.5),
         plot.title = element_text(margin=margin(0,0,15,0)),
@@ -279,7 +285,7 @@ p3_subset$labels[which(p3_subset$date == max(p3_subset$date))] <- p3_subset$inde
   # Range from 80-160 
   # Colors -- DC = blue, VA = green, MD = orange
 
-p5 <- ggplot(p3_subset, aes(x = date, y = indexed_qtrly_estabs_count, color = as.factor(area_fips))) +
+p3 <- ggplot(p3_subset, aes(x = date, y = indexed_qtrly_estabs_count, color = as.factor(area_fips))) +
   geom_line(linewidth = 1) +
   theme_classic() +
   geom_text(aes(label=p3_subset$labels, color = as.factor(area_fips)), show.legend=FALSE, hjust = 0) +
@@ -287,7 +293,7 @@ p5 <- ggplot(p3_subset, aes(x = date, y = indexed_qtrly_estabs_count, color = as
   scale_x_date(date_breaks = "3 months", date_labels = "%Y/%m", expand=c(0,0), limits = as.Date(c(paste0("2018", "-01-01"), "2025-01-01")))
 
 
-p5 + 
+p3 + 
   theme(legend.position = c(0.2,0.8),
         axis.text.x = element_text(angle = 45, vjust=0.5),
         plot.title = element_text(margin=margin(0,0,15,0)),
@@ -303,3 +309,156 @@ p5 +
 
 
 ```
+
+## Plot 4: Full and Limited service employment levels in DC since Covid 
+
+```{r}
+
+# Subset and restructure data 
+## Employment level data is available by month 
+## Pivot month-specific columns into one column
+
+## Full-service establishments
+
+p4_fs <- df_fs_sums %>% pivot_longer(cols = c("all_month1_emplvl", "all_month2_emplvl", "all_month3_emplvl"),
+                                    names_to = "Qtr_month", values_to = "employment_lvl") %>% 
+           mutate(type = "Full-service restaurants",
+                  month = case_when(qtr==1 & Qtr_month=="all_month1_emplvl" ~ 01,
+                           qtr==1 & Qtr_month=="all_month2_emplvl" ~ 02,
+                           qtr==1 & Qtr_month=="all_month3_emplvl" ~ 03,
+                           qtr==2 & Qtr_month=="all_month1_emplvl" ~ 04,
+                           qtr==2 & Qtr_month=="all_month2_emplvl" ~ 05,
+                           qtr==2 & Qtr_month=="all_month3_emplvl" ~ 06,
+                           qtr==3 & Qtr_month=="all_month1_emplvl" ~ 07,
+                           qtr==3 & Qtr_month=="all_month2_emplvl" ~ 08,
+                           qtr==3 & Qtr_month=="all_month3_emplvl" ~ 09,
+                           qtr==4 & Qtr_month=="all_month1_emplvl" ~ 10,
+                           qtr==4 & Qtr_month=="all_month2_emplvl" ~ 11,
+                           qtr==4 & Qtr_month=="all_month3_emplvl" ~ 12),
+                   date = as.Date(paste(year, month, "01", sep="-"))) 
+
+
+## Limited-service establishments
+
+p4_ls <- df_ls_sums %>% pivot_longer(cols = c("all_month1_emplvl", "all_month2_emplvl", "all_month3_emplvl"),
+                                    names_to = "Qtr_month", values_to = "employment_lvl") %>% 
+           mutate(type = "Limited-service restaurants",
+                  month = case_when(qtr==1 & Qtr_month=="all_month1_emplvl" ~ 01,
+                           qtr==1 & Qtr_month=="all_month2_emplvl" ~ 02,
+                           qtr==1 & Qtr_month=="all_month3_emplvl" ~ 03,
+                           qtr==2 & Qtr_month=="all_month1_emplvl" ~ 04,
+                           qtr==2 & Qtr_month=="all_month2_emplvl" ~ 05,
+                           qtr==2 & Qtr_month=="all_month3_emplvl" ~ 06,
+                           qtr==3 & Qtr_month=="all_month1_emplvl" ~ 07,
+                           qtr==3 & Qtr_month=="all_month2_emplvl" ~ 08,
+                           qtr==3 & Qtr_month=="all_month3_emplvl" ~ 09,
+                           qtr==4 & Qtr_month=="all_month1_emplvl" ~ 10,
+                           qtr==4 & Qtr_month=="all_month2_emplvl" ~ 11,
+                           qtr==4 & Qtr_month=="all_month3_emplvl" ~ 12),
+                   date = as.Date(paste(year, month, "01", sep="-"))) 
+
+
+## Bars and drinking places
+
+p4_b <- df_b_sums %>% pivot_longer(cols = c("all_month1_emplvl", "all_month2_emplvl", "all_month3_emplvl"),
+                                    names_to = "Qtr_month", values_to = "employment_lvl") %>% 
+           mutate(type = "Bars and drinking places",
+                  month = case_when(qtr==1 & Qtr_month=="all_month1_emplvl" ~ 01,
+                           qtr==1 & Qtr_month=="all_month2_emplvl" ~ 02,
+                           qtr==1 & Qtr_month=="all_month3_emplvl" ~ 03,
+                           qtr==2 & Qtr_month=="all_month1_emplvl" ~ 04,
+                           qtr==2 & Qtr_month=="all_month2_emplvl" ~ 05,
+                           qtr==2 & Qtr_month=="all_month3_emplvl" ~ 06,
+                           qtr==3 & Qtr_month=="all_month1_emplvl" ~ 07,
+                           qtr==3 & Qtr_month=="all_month2_emplvl" ~ 08,
+                           qtr==3 & Qtr_month=="all_month3_emplvl" ~ 09,
+                           qtr==4 & Qtr_month=="all_month1_emplvl" ~ 10,
+                           qtr==4 & Qtr_month=="all_month2_emplvl" ~ 11,
+                           qtr==4 & Qtr_month=="all_month3_emplvl" ~ 12),
+                   date = as.Date(paste(year, month, "01", sep="-"))) 
+
+
+p4_subset <- rbind(p4_fs, p4_ls, p4_b)
+
+p4_subset_dc <- p4_subset %>% filter(area_fips=="11001")
+
+```
+
+
+```{r}
+# Plot 
+
+## Data is p4_subset or p4_subset_dc created above
+
+p4 <- ggplot(p4_subset_dc, aes(x = date, y = employment_lvl, color = type, group = type)) +
+  expand_limits(y = 45000) +
+  geom_line() +
+  geom_vline(xintercept = as.Date("2023-05-01"), linetype="dashed", color = "black") +
+  geom_vline(xintercept = as.Date("2023-07-01"), linetype="dashed", color = "black") +
+  geom_vline(xintercept = as.Date("2024-07-01"), linetype="dashed", color = "black") +
+  geom_text(aes(x=as.Date("2021-11-01"), 
+                label="Initiative I82 Increases: \n May 2023:  $5.35 to $6.00 \n July 2023: $6:00 to $8.00 \n July 2024: $8.00 to $10.00", 
+                y=35000), size = 3, colour="black") +
+  theme_classic() +
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y", expand = c(0,0))
+
+p4 + 
+  theme(legend.position = c(0.2,0.85)) + 
+  scale_y_continuous(breaks=seq(0,45000,10000)) +
+  scale_color_brewer(palette="Dark2") +
+  labs(title = "Full and Limited service employment levels in DC have rebounded since Covid",
+       x = "Year", y = "Number of Employees")
+
+```
+
+## Plot 5: Full and Limited service restaurant employment levels in DC since I82 implementation 
+
+```{r}
+p5_subset <- p4_subset_dc %>% filter(year >= 2022)
+
+p5_subset_labels <- p5_subset
+p5_subset_labels$labels <- NA
+
+# Adding maximum value label 
+p5_subset_labels$labels[which(p5_subset_labels$date == max(p5_subset_labels$date))] <- p5_subset_labels$employment_lvl[which(p5_subset_labels$date == max(p5_subset_labels$date))] 
+
+# Adding label for May 2023
+p5_subset_labels$labels[which(p5_subset_labels$date == as.Date("2023-05-01"))] <- p5_subset_labels$employment_lvl[which(p5_subset_labels$date == as.Date("2023-05-01"))] 
+
+```
+
+```{r, warning=FALSE}
+# Plot 5
+
+## Resource: https://r-graph-gallery.com/275-add-text-labels-with-ggplot2.html 
+
+p5 <- ggplot(p5_subset_labels, aes(x = date, y = employment_lvl, color = type, group = type)) +
+  expand_limits(x = as.Date("2024-12-01"), y = 45000) +
+  geom_line(size=1) +
+  geom_vline(xintercept = as.Date("2023-05-01"), linetype="dashed", color = "black") +
+  geom_vline(xintercept = as.Date("2023-07-01"), linetype="dashed", color = "black") +
+  geom_vline(xintercept = as.Date("2024-07-01"), linetype="dashed", color = "black") +
+  geom_label(label = p5_subset_labels$labels, nudge_x = 1, warning=F, show.legend = FALSE) +
+  geom_text(aes(x=as.Date("2022-07-01"), 
+                label="Initiative I82 Increases: \nMay 2023:  $5.35 to $6.00 \nJuly 2023: $6:00 to $8.00 \nJuly 2024: $8.00 to $10.00", 
+                y=20000, fontface = "plain"), size = 3, colour="black", hjust = 0) +
+  theme_classic() +
+  scale_x_date(date_breaks = "3 months", date_labels = "%Y/%m", expand = c(0,0))
+
+p5 + 
+  theme(legend.position = c(0.2,0.85),
+        axis.text.x=element_text(angle = 45, vjust=0.5),
+        plot.title = element_text(margin=margin(0,0,15,0))) +
+  scale_y_continuous(breaks=seq(0,45000,5000)) +
+  scale_color_brewer(palette="Dark2") +
+  labs(title = "Restaurant employment levels in DC since I82 implementation",
+       x = "Date", y = "Number of Employees")
+
+```
+
+## Table 1: 
+
+
+
+
+
