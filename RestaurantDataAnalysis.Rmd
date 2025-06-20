@@ -73,5 +73,89 @@ df_b <- do.call(rbind, df_list_b)
 
 ```
 
-# Clean data tables
+## Clean data tables
+
+```{r}
+
+# Convert quarter & year variables to dates 
+## Creating new variable "date" with the structure "%Y-%m"
+
+df_fs <- df_fs %>% mutate(month = case_when(qtr==1 ~ "01",
+                                   qtr==2 ~ "04",
+                                   qtr==3 ~ "07",
+                                   qtr==4 ~ "10"),
+                   date = as.Date(paste(year, month, "01", sep = "-")))
+
+
+
+df_ls <- df_ls %>% mutate(month = case_when(qtr==1 ~ "01",
+                                   qtr==2 ~ "04",
+                                   qtr==3 ~ "07",
+                                   qtr==4 ~ "10"),
+                   date = as.Date(paste(year, month, "01", sep = "-")))
+
+
+df_b <- df_b %>% mutate(month = case_when(qtr==1 ~ "01",
+                                   qtr==2 ~ "04",
+                                   qtr==3 ~ "07",
+                                   qtr==4 ~ "10"),
+                   date = as.Date(paste(year, month, "01", sep = "-")))
+
+```
+
+
+```{r}
+# Restructure datasets
+## Data for each NAICS code is further categorize by "own_code"
+## Own code 1 == Federal government 
+## Own code 5 == Private
+## The data should be restructured to show the sum across all ownership types
+
+df_fs_sums <- df_fs %>% group_by(area_fips, area_title, industry_code, year, qtr, date) %>% 
+  summarise(all_qtrly_estabs_count = sum(qtrly_estabs_count),
+            all_month1_emplvl = sum(month1_emplvl),
+            all_month2_emplvl = sum(month2_emplvl),
+            all_month3_emplvl = sum(month3_emplvl))
+
+df_ls_sums <- df_ls %>% group_by(area_fips, area_title, industry_code, year, qtr, date) %>% 
+  summarise(all_qtrly_estabs_count = sum(qtrly_estabs_count),
+            all_month1_emplvl = sum(month1_emplvl),
+            all_month2_emplvl = sum(month2_emplvl),
+            all_month3_emplvl = sum(month3_emplvl))
+
+
+df_b_sums <- df_b %>% group_by(area_fips, area_title, industry_code, year, qtr, date) %>% 
+  summarise(all_qtrly_estabs_count = sum(qtrly_estabs_count),
+            all_month1_emplvl = sum(month1_emplvl),
+            all_month2_emplvl = sum(month2_emplvl),
+            all_month3_emplvl = sum(month3_emplvl))
+
+```
+
+# Exploring the data 
+
+## Plot 1.1: Growth of full-service establishments in DC 
+
+```{r}
+## Subset for plot
+
+index_year <- 2023
+
+
+p5_subset <- df_fs %>% mutate(type = "Full-Service") %>% filter(own_code==5, year >= index_year)
+
+# Indexes for [Year]
+dc_index <- p5_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==11001) %>% select(qtrly_estabs_count) %>% pull()
+md_index <- p5_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==24000) %>% select(qtrly_estabs_count) %>% pull()
+va_index <- p5_subset %>% filter(date==paste0(index_year,"-01-01"), area_fips==51000) %>% select(qtrly_estabs_count) %>% pull()
+
+p5_subset <- p5_subset %>% mutate(indexed_qtrly_estabs_count = round(case_when(area_fips==11001 ~ 100*(qtrly_estabs_count/dc_index),
+                                                       area_fips==24000 ~ 100*(qtrly_estabs_count/md_index),
+                                                       area_fips==51000 ~ 100*(qtrly_estabs_count/va_index)),2))
+
+p5_subset$labels <- NA
+p5_subset$labels[which(p5_subset$date == max(p5_subset$date))] <- p5_subset$indexed_qtrly_estabs_count[which(p5_subset$date == max(p5_subset$date))]
+
+```
+
 
