@@ -545,7 +545,7 @@ knitr::include_graphics("./Images/TwitterScreenshot.png")
 
 <font size = "3">Looking into the details, you’ll find that the nonprofit director is the Executive Director of the Employment Policies Institute, and what they’re contesting is the impact of DC’s tipped minimum wage policy – Initiative 82.
 
-Initiative 82 (I82) was first passed in 2022, after a ballot initiative for raising the tipped minimum wage in the District received 73.9% of the popular vote. At the time, the DC minimum wage for service workers was only \$5.35/hr, well below the standard minimum wage of \$16.10/hr (now up to \$17.50/hr).^[https://fred.stlouisfed.org/series/STTMINWGDC] Although service workers do make tips on top of their base wages, tips are dependent on customer spending levels and generosity, leading to cases of income instability.
+Initiative 82 (I82) was first passed in 2022, after a ballot initiative for raising the tipped minimum wage in the District received 73.9% of the popular vote. At the time, the DC minimum wage for service workers was only \$5.35/hr, well below the standard minimum wage of \$16.10/hr (now up to \$17.50/hr).^[U.S. Department of Labor, State Minimum Wage Rate for District of Columbia [STTMINWGDC], retrieved from FRED, Federal Reserve Bank of St. Louis; https://fred.stlouisfed.org/series/STTMINWGDC, July 1, 2025.] Although service workers do make tips on top of their base wages, tips are dependent on customer spending levels and generosity, leading to cases of income instability.
 
 Under I82, the tipped minimum wage has already been increased to $10, with further increases planned in coming years. However, despite initial popular support, the DC Council voted to pause I82 implementation in June of this year.^[Jackie Bensen, "DC Council votes to pause voter-approved tipped wage increase", *NBC*, https://www.nbcwashington.com/news/local/dc-council-votes-to-pause-tipped-wage-increase/3927718/] As evidenced by the Tweet exchange, many of I82’s impacts have been heavily contested, with enough concern that Mayor Muriel Bowser has even proposed repealing the policy completely. 
 
@@ -585,7 +585,7 @@ Which respect to consumers, analysts might ask:
 +	How does consumer spending and tipping at full-service restaurants in DC compare to national trends in consumer spending since I82 implementation?
 +	How elastic is consumer spending and tipping relative to price increases at full-service restaurants and bars in DC? 
 
-To explore these questions, many reports have drawn on the [Bureau of Labor Statistics’ Quarterly Census of Employment Wages (QCEW)](https://www.bls.gov/cew/downloadable-data-files.htm), a publicly available data source providing quarterly statistics by North American Industry Classification System (NAICS) code. I will be primarily exploring this data source in this analysis.
+To explore these questions, many reports have drawn on the [Bureau of Labor Statistics’ Quarterly Census of Employment Wages (QCEW)](https://www.bls.gov/cew/downloadable-data-files.htm), a publicly available data source providing quarterly statistics by North American Industry Classification System (NAICS) code. I will be primarily exploring this data source in this analysis.^[As a note, the QCEW numbers in my data may not perfectly align with the numbers reported in the DC Budget Council and EPI reports; I assume this is because I am downloading the data at a later time and slight edits may have occurred.]
 
 </font>
 
@@ -719,7 +719,7 @@ knitr::include_graphics("./Images/ERS_FoodExpenditure_Table.png")
 <br>
 <font size = "3">However, this data source alone did not provide decisive insights, since "food away from home" includes limited-service restaurants, mobile food vendors, and other food contractors – which are not impacted by I82 – in addition to full-service restaurants.
 
-One Fair Wage (OFW), a non-profit that advocates for the end of the tipped minimum wage, has used income data to draw conclusions about DC tipping practices. In a November 2023 report on I-82, OFW shared data from Square showing that workers’ earnings including tips have been increasing at a faster annual rate than base pay in recent years:^[One Fair Wage, "The Sky Is Not Falling; The Floor Is Rising", https://static1.squarespace.com/static/6374f6bf33b7675afa750d48/t/65551d0897043249c7c1293b/1700076810648/OFW_OneYearAfter_DC82+%281%29.pdf, pg 7]</font>
+One Fair Wage (OFW), a non-profit that advocates for the end of the tipped minimum wage, has used income data to draw conclusions about DC tipping practices. In a November 2023 report on I82, OFW shared data from Square showing that workers’ earnings including tips have been increasing at a faster annual rate than base pay in recent years:^[One Fair Wage, "The Sky Is Not Falling; The Floor Is Rising", https://static1.squarespace.com/static/6374f6bf33b7675afa750d48/t/65551d0897043249c7c1293b/1700076810648/OFW_OneYearAfter_DC82+%281%29.pdf, pg 7]</font>
 
 <br>
 ```{r OFW-chart, echo=FALSE, fig.align='center', out.height='75%', out.width='75%'}
@@ -746,7 +746,7 @@ However, the main purpose of this analysis was to provide a quick look at some o
 
 It's likely too early to make conclusive statements about impacts from I82 overall. There are a number of confounding factors, and the data reflects a relatively short time period from which to make causal conclusions.
 
-One question that may come up in future analyses is the extent to which industry change is an expected side effect of the policy. In some cases, restaurant closures, re-openings, and employment fluctuations might be a necessary reality as the industry adjusts to new models, prices, and practices that allow it to pay employees a livable wage. 
+Additionally, one question that may come up in future analyses is the extent to which industry change is an expected side effect of the policy. In some cases, restaurant closures, re-openings, and employment fluctuations might be a necessary reality as the industry adjusts to new models, prices, and practices that allow it to pay employees a livable wage. 
 
 At the same time, it’s important to continue looking at anecdotal evidence in the context of historical, regional, and national economic trends to determine the real scale of impacts. With such a short time frame since implementation, and the widely acknowledged need for industry adaptation, it would feel unfortunate for the DC Council to decide prematurely that a healthy local economy and a standard minimum wage for service workers are mutually exclusive realities. </font> 
 
