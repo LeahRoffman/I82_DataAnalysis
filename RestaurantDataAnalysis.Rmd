@@ -187,7 +187,7 @@ p1 <- p1 +
   scale_y_continuous(limits = c(80,160)) +
   scale_color_manual(labels = c("District of Columbia", "Maryland", "Virginia"), name = "State", 
                      values=c("darkblue", "darkorange", "darkgreen")) +
-  labs(title = paste0("Growth of full-service establishments in DC far outpaces surrounding jurisdictions"),
+  labs(title = paste0("Growth of full-service establishments in DC far outpaces surrounding  \njurisdictions"),
        subtitle = paste0("Index: ",index_year,"Q1=100"),
        x = "",
        y = "",
@@ -744,7 +744,7 @@ Further analysis of DC-specific data would be helpful to assess how elastic cons
 
 However, the main purpose of this analysis was to provide a quick look at some of the conclusions being drawn and to highlight how data can be presented differently to support different conclusions. 
 
-It's likely too early to make conclusive statements about impacts from I82 overall. There are a number of confounding factors, and the data reflects a relatively short time period from which to make causal conclusions.
+It feels too early to make conclusive statements about impacts from I82 overall. There are a number of confounding factors, and the data reflects a relatively short time period from which to make causal conclusions.
 
 Additionally, one question that may come up in future analyses is the extent to which industry change is an expected side effect of the policy. In some cases, restaurant closures, re-openings, and employment fluctuations might be a necessary reality as the industry adjusts to new models, prices, and practices that allow it to pay employees a livable wage. 
 
